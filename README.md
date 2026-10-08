@@ -1,7 +1,9 @@
-# Tauri + React + Typescript
+# Golang to python translator
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+### Features:
 
-## Recommended IDE Setup
+**1. Comfy GUI with terminal (shows errors and warnings during translation)**
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+**2. Export files for translation**
+
+#### Tauri + Python + Vanilla JS

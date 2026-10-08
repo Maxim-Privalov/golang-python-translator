@@ -1,24 +1,20 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri + React + Typescript</title>
-  </head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TYAPIK4 — конвертер GO в Python</title>
+    <meta name="description" content="Преобразуйте GO в Python с помощью умного алгоритма">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Irish+Grover&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="src/style.css">
+</head>
 
   <body>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-      <div style="display:grid">
-        <h4>Input (Go code)</h4>
-        <textarea id="code" placeholder="Enter your code"></textarea>
-        <button id="btn">Translate</button>
-      </div>
-      <div style="display:grid">
-        <h4>Output (Python code)</h4>
-        <pre id="out"></pre>
-      </div>
-    </div>
+    <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -14,8 +14,8 @@
     "windows": [
       {
         "title": "golang-python-translator",
-        "width": 800,
-        "height": 600
+        "width": 1100,
+        "height": 900
       }
     ],
     "security": {

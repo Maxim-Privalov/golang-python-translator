@@ -1,0 +1,128 @@
+
+<!-- header  -->
+<header class="header">
+  <div class="container header__inner">
+    <a class="logo" href="#top" aria-label="TYAPIK4 — на главную">TYAPIK4</a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="#how">Как использовать?</a>
+      <a href="#about">О нас</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- h1  -->
+  <section class="hero container">
+    <img src="src/images/go.svg" alt="">
+
+    <div class="hero__text">
+      <h1 class="hero__title">Преобразуйте GO в Python с помощью умного алгоритма</h1>
+      <p class="hero__subtitle">Перевод исходного кода из Python предполагает использование методов обработки естественного языка (NLP) и алгоритмов машинного обучения для анализа и понимания исходного кода</p>
+    </div>
+
+    <img src="src/images/python.svg" alt="">
+  </section>
+
+  <!-- code block  -->
+  <section class="panes container" aria-label="Редакторы кода">
+
+    <div class="pane">
+      <h2 class="pane__title">GO</h2>
+      <div class="editor" id="editor-go" data-placeholder="Введите текст кода">
+        <div class="editor__gutter" aria-hidden="true"><div class="editor__gutter-inner"></div></div>
+        <div class="editor__body">
+          <div class="editor__mirror" aria-hidden="true"><div class="editor__mirror-inner"></div></div>
+          <textarea class="editor__input" wrap="off" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" aria-label="Исходный код на GO"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane">
+      <h2 class="pane__title">Python</h2>
+      <div class="editor" id="editor-py" data-placeholder="Введите текст кода">
+        <div class="editor__gutter" aria-hidden="true"><div class="editor__gutter-inner"></div></div>
+        <div class="editor__body">
+          <div class="editor__mirror" aria-hidden="true"><div class="editor__mirror-inner"></div></div>
+          <textarea class="editor__input" wrap="off" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" aria-label="Код на Python"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- button -->
+  <div class="actions container">
+    <button class="btn btn--clear" id="btn-clear" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      Очистить
+    </button>
+    <button class="btn btn--run" id="btn-run" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>
+      Запустить
+    </button>
+  </div>
+
+  <!-- terminal -->
+  <section class="terminal container" id="terminal" aria-label="Терминал">
+    <div class="terminal__out" id="term-out" role="log" aria-live="polite"></div>
+    <label class="terminal__line">
+      <span class="terminal__prompt" id="term-prompt"></span>
+      <input class="terminal__input" id="term-input" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Командная строка">
+    </label>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section container" id="how">
+    <h2 class="section__title">Как использовать?</h2>
+    <ol class="steps">
+      <li class="step step--1"><b>Шаг 1</b><span>Скопировать код GO</span></li>
+      <li class="step step--2"><b>Шаг 2</b><span>Вставить в левое окно - GO</span></li>
+      <li class="step step--3"><b>Шаг 3</b><span>Нажать кнопку конвертировать</span></li>
+      <li class="step step--4"><b>Шаг 4</b><span>Скачать или скопировать</span></li>
+    </ol>
+  </section>
+
+  <!-- ONas -->
+  <section class="section container" id="about">
+    <h2 class="section__title">О нас</h2>
+    <ul class="team">
+      <li class="member">
+        <div class="avatar"><img src="src/images/ma.png" alt=""></div>
+        <div class="member__info">
+          <h3>Привалов Максим</h3>
+          <p>2 подгруппа<br>Главный Разработчик, Документация</p>
+        </div>
+      </li>
+      <li class="member">
+        <div class="avatar"><img src="src/images/x.png" alt=""></div>
+        <div class="member__info">
+          <h3>Егоров Артем</h3>
+          <p>2 подгруппа<br>Разработчик, Дизайнер</p>
+        </div>
+      </li>
+      <li class="member">
+        <div class="avatar"><img src="src/images/d.png" alt=""></div>
+        <div class="member__info">
+          <h3>Ким Денис</h3>
+          <p>3 подгруппа<br>Разработчик, Документация</p>
+        </div>
+      </li>
+      <li class="member">
+        <div class="avatar"><img src="src/images/da.png" alt=""></div>
+        <div class="member__info">
+          <h3>Самохин Данил</h3>
+          <p>2 подгруппа<br>Разработчик</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer container" id="faq">
+  <span class="logo logo--footer">TYAPIK4</span>
+  <p>© 2026 • TYAPIK4. Все права защищены.</p>
+  <div class="maximprivalov59"><p>Все вопросы по адресу: </p><a href="mailto:maximprivalov59@gmail.com">maximprivalov59@gmail.com</a></div>
+</footer>

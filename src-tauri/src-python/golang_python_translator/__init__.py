@@ -2,7 +2,7 @@ from anyio.from_thread import start_blocking_portal
 from golang_python_translator.lexer import GoLexer, LexicalError
 from golang_python_translator.parser import Parser
 from golang_python_translator.codegen import PythonCodeGenerator, CodeGenError
-from golang_python_translator.pty_shell import PtyShell
+from golang_python_translator.pty_shell_windows import PtyShell
 from pydantic import BaseModel
 from typing import Annotated
 from pytauri import (

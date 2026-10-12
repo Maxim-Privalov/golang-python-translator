@@ -1,11 +1,3 @@
-"""Кодогенератор: AST упрощённого Go -> исходный код на Python.
-
-Использование:
-    tree = Parser(tokens).parse()
-    gen = PythonCodeGenerator()
-    code = gen.generate(tree)
-    print(gen.warnings)   # что не удалось перенести точно
-"""
 import keyword
 import re
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
@@ -27,9 +19,6 @@ class CodeGenError(Exception):
     """Ошибка генерации кода."""
 
 
-# --------------------------------------------------------------------------
-# Типы
-# --------------------------------------------------------------------------
 INTS: Set[str] = {
     "int", "int8", "int16", "int32", "int64",
     "uint", "uint8", "uint16", "uint32", "uint64", "uintptr",
@@ -45,9 +34,6 @@ CONVERSIONS: Dict[str, str] = {
     "bool": "bool",
 }
 
-# --------------------------------------------------------------------------
-# Операторы и приоритеты (по возрастанию)
-# --------------------------------------------------------------------------
 PREC_OR, PREC_AND, PREC_NOT, PREC_CMP, PREC_ADD, PREC_MUL, PREC_UNARY, PREC_ATOM = range(1, 9)
 
 BINOPS: Dict[str, Tuple[str, int]] = {
@@ -73,9 +59,6 @@ AUG_ASSIGN: Dict[str, str] = {
     "times_assign": "*=",
 }
 
-# --------------------------------------------------------------------------
-# Стандартная библиотека: "пакет.Метод" -> (шаблон, python-модуль, тип результата)
-# --------------------------------------------------------------------------
 STDLIB: Dict[str, Tuple[str, Optional[str], Optional[str]]] = {
     "strings.ToUpper": ("{0}.upper()", None, "string"),
     "strings.ToLower": ("{0}.lower()", None, "string"),
@@ -135,20 +118,11 @@ def py_string(raw: str) -> str:
 
 
 class PythonCodeGenerator:
-    """Обходит AST (parser.py) и строит эквивалентный код на Python.
-
-    Результат не использует вспомогательных функций: / и % для int переводятся
-    в // и % Python (для отрицательных чисел результат может отличаться от Go),
-    Printf переводится в оператор % над строкой.
-    """
 
     def __init__(self, indent: str = "    ") -> None:
         self.indent_str: str = indent
         self._reset()
 
-    # ------------------------------------------------------------------
-    # Состояние
-    # ------------------------------------------------------------------
     def _reset(self) -> None:
         self.lines: List[str] = []
         self.level: int = 0
@@ -167,9 +141,6 @@ class PythonCodeGenerator:
         self.warnings: List[str] = []
         self._tmp: int = 0
 
-    # ------------------------------------------------------------------
-    # Публичный интерфейс
-    # ------------------------------------------------------------------
     def generate(self, program: Program) -> str:
         self._reset()
         self._prescan(program)
@@ -194,9 +165,6 @@ class PythonCodeGenerator:
 
         return "\n\n\n".join("\n".join(s) for s in sections) + "\n"
 
-    # ------------------------------------------------------------------
-    # Предварительный обход
-    # ------------------------------------------------------------------
     def _walk(self, n: Any) -> Iterator[Node]:
         if isinstance(n, Node):
             yield n
@@ -241,10 +209,7 @@ class PythonCodeGenerator:
         while lines and lines[-1] == "":
             lines.pop()
         return lines
-
-    # ------------------------------------------------------------------
-    # Мелкие утилиты
-    # ------------------------------------------------------------------
+    
     def emit(self, line: str = "") -> None:
         self.lines.append(self.indent_str * self.level + line if line else "")
 
@@ -280,9 +245,6 @@ class PythonCodeGenerator:
                 return s[name]
         return None
 
-    # ------------------------------------------------------------------
-    # Типы Go -> Python
-    # ------------------------------------------------------------------
     @staticmethod
     def _split_map(t: str) -> Tuple[str, str]:
         """'map[K]V' -> (K, V) с учётом вложенных скобок в K."""
@@ -418,9 +380,6 @@ class PythonCodeGenerator:
                 return f"float({s})"
         return s
 
-    # ------------------------------------------------------------------
-    # Диспетчеризация
-    # ------------------------------------------------------------------
     def stmt(self, node: Any) -> None:
         handler = getattr(self, "stmt_" + type(node).__name__, None)
         if handler is None:
@@ -452,9 +411,7 @@ class PythonCodeGenerator:
         self.pop()
         self.level -= 1
 
-    # ------------------------------------------------------------------
     # Типы верхнего уровня (struct / interface / type поднимаются в модуль)
-    # ------------------------------------------------------------------
     def _gen_struct(self, n: StructDecl) -> None:
         self.need_dataclass = True
         self.emit("@dataclass")
@@ -491,9 +448,7 @@ class PythonCodeGenerator:
     def stmt_MapDecl(self, n: Any) -> None:
         self.emit(f"pass  # map[{n.key_type}]{n.value_type}")
 
-    # ------------------------------------------------------------------
     # Инструкции
-    # ------------------------------------------------------------------
     def stmt_FunctionDecl(self, n: FunctionDecl) -> None:
         # Go: func f(a, b int) - тип b относится и к a
         params: List[Tuple[str, Optional[str]]] = []
@@ -650,9 +605,7 @@ class PythonCodeGenerator:
     def stmt_ExpressionStatement(self, n: Any) -> None:
         self.emit(self.expr(n.expression))
 
-    # ------------------------------------------------------------------
     # Выражения
-    # ------------------------------------------------------------------
     def expr_Identifier(self, n: Any, pp: int, right: bool) -> str:
         if not self.is_var(n.name):
             mapping = {"nil": "None", "true": "True", "false": "False"}
@@ -728,7 +681,7 @@ class PythonCodeGenerator:
         args = ", ".join(self.expr(a) for a in n.args)
         return f"{self.ident(pkg)}.{method}({args})"
 
-    # --- встроенные функции Go ---
+    #  встроенные функции Go
     def _builtin(self, name: str, args: List[Any]) -> Optional[str]:
         if name in ("len", "cap") and len(args) == 1:
             return f"len({self.expr(args[0])})"

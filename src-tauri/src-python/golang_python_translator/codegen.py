@@ -714,7 +714,7 @@ class PythonCodeGenerator:
             return "print(" + ", ".join(vals) + ")"
         return None
 
-    # --- пакеты стандартной библиотеки ---
+    # пакеты стандартной библиотеки 
     def strexpr(self, node: Any) -> str:
         """Выражение, приведённое к строке."""
         if self.infer(node) == "string":

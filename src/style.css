@@ -129,10 +129,16 @@ button { font: inherit; }
   white-space: pre;
   color: #f4f4f4;
 }
+
+
 .editor__mirror .ln.is-active { background: var(--editor-line); color: #111; }
 .editor__mirror .ln.is-placeholder { color: #2a2a2a; }
 
 .editor__input {
+  font: inherit;
+  font-family: var(--font-code);
+  font-size: 16px;
+  line-height: var(--line-h);
   position: absolute;
   inset: 0;
   width: 100%;

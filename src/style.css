@@ -252,6 +252,11 @@ button { font: inherit; }
 .member h3 { font-size: 28px; font-weight: 400; line-height: 1.2; }
 .member p { font-size: 18px; color: #d2d2d2; line-height: 1.4; }
 
+.merged__member {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+}
 
 .footer {
   display: flex; align-items: center; justify-content: center; gap: 50px;

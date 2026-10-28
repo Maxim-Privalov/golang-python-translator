@@ -24,14 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: "macos-14" # for Intel based macs.
-            target: "x86_64-apple-darwin"
-          - platform: "macos-14" # for Arm based macs (M1 and above).
-            target: "aarch64-apple-darwin"
-          - platform: "ubuntu-22.04"
-            target: "x86_64-unknown-linux-gnu"
-          - platform: "ubuntu-22.04-arm"
-            target: "aarch64-unknown-linux-gnu"
           - platform: "windows-2022"
             target: "x86_64-pc-windows-msvc"
           - platform: "windows-11-arm"
@@ -40,12 +32,6 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install system dependencies (ubuntu only)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -91,10 +77,6 @@ jobs:
           curl -L "$url" | tar -xz -C "$DEST_DIR"
 
           # ref: <https://github.com/pytauri/pytauri/issues/99#issuecomment-2704556726>
-          if [[ "${{ runner.os }}" == "macOS" ]]; then
-              python_major_minor="${PYTHON_VERSION%.*}"  # "3.13.7" -> "3.13"
-              install_name_tool -id "@rpath/libpython${python_major_minor}.dylib" "$DEST_DIR/python/lib/libpython${python_major_minor}.dylib"
-          fi
 
       - name: Install the project into the embedded python environment
         env:
@@ -117,46 +99,17 @@ jobs:
           $PYO3_PYTHON = (Resolve-Path -LiteralPath ".\src-tauri\pyembed\python\python.exe").Path
           echo "PYO3_PYTHON=$PYO3_PYTHON" >> $env:GITHUB_ENV
 
-      - name: Set build environment variables (linux)
-        if: runner.os == 'Linux'
-        shell: bash
-        env:
-          # `golang-python-translator` is your app `productName` in `tauri.conf.json`
-          PRODUCT_NAME: "golang-python-translator"
-        run: |
-          PYO3_PYTHON=$(realpath ./src-tauri/pyembed/python/bin/python3)
-          RUSTFLAGS=" \
-            -C link-arg=-Wl,-rpath,\$ORIGIN/../lib/$PRODUCT_NAME/lib \
-            -L $(realpath ./src-tauri/pyembed/python/lib)"
-
-          echo "PYO3_PYTHON=$PYO3_PYTHON" >> $GITHUB_ENV
-          echo "RUSTFLAGS=$RUSTFLAGS" >> $GITHUB_ENV
-
-      - name: Set build environment variables (macos)
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          PYO3_PYTHON=$(realpath ./src-tauri/pyembed/python/bin/python3)
-          RUSTFLAGS=" \
-            -C link-arg=-Wl,-rpath,@executable_path/../Resources/lib \
-            -L $(realpath ./src-tauri/pyembed/python/lib)"
-
-          echo "PYO3_PYTHON=$PYO3_PYTHON" >> $GITHUB_ENV
-          echo "RUSTFLAGS=$RUSTFLAGS" >> $GITHUB_ENV
-
-      - name: Build and bundle the app
+      - name: Build and bundle
+        id: tauri
         uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: "App v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
-          releaseDraft: true
-          includeDebug: true # Optional, disable to speed up the build
+          includeDebug: true
           args: '--target ${{ matrix.target }} --config src-tauri/tauri.bundle.json --verbose'
-      - name: Upload artifacts
+
+      - name: Upload all artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: app-${{ matrix.target }}
-          path: src-tauri/target/${{ matrix.target }}/release/bundle/**
+          name: windows-arm64-artifacts
+          path: |
+            target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
+            target/x86_64-pc-windows-msvc/debug/bundle/nsis/*.exe

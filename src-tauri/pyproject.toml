@@ -11,7 +11,7 @@ dependencies = [
     "pytauri == 0.8.*",
     "pydantic == 2.*",
     "anyio == 4.*",
-    "pillow == 12.3.0",
+    "ply>=3.11",
 ]
 
 [project.entry-points.pytauri]

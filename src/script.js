@@ -149,7 +149,7 @@ export class Terminal {
   }
 
   changePwd(pwd) {
-    const pwd_prefix = "[" + pwd.split("/")?.at(-1).trim() + "]$ ";
+    const pwd_prefix = pwd.trim() + "> ";
     this.promptText = pwd_prefix;
     this.promptObj.textContent = this.promptText;
   };

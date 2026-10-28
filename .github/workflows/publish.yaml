@@ -106,6 +106,44 @@ jobs:
           includeDebug: true
           args: '--target ${{ matrix.target }} --config src-tauri/tauri.bundle.json --verbose'
 
+      # - name: Start App in Background
+      #   shell: pwsh
+      #   run: |
+      #     # Находим точный путь к скомпилированному exe
+      #     $target = "${{ matrix.target }}"
+      #     $exePath = Get-ChildItem -Path "src-tauri/target/$target/bundle-release/*.exe" -Exclude "*.vshost.exe" | Select-Object -First 1 -ExpandProperty FullName
+      #     echo "Найден исполняемый файл: $exePath"
+          
+      #     # Запускаем в фоне и перенаправляем потоки вывода в файлы (чтобы шаг не завис)
+      #     $process = Start-Process -FilePath $exePath -WindowStyle Hidden -PassThru -RedirectStandardOutput "app_stdout.log" -RedirectStandardError "app_stderr.log"
+          
+      #     # Сохраняем PID процесса в переменную окружения GitHub для следующих шагов
+      #     echo "APP_PID=$($process.Id)" >> $env.GITHUB_ENV
+      #     echo "Приложение запущено с PID: $($process.Id)"
+          
+      #     # Даем приложению 5 секунд на запуск перед началом тестов
+      #     Start-Sleep -Seconds 5
+
+      # # Шаг 3: Гарантированная остановка приложения (Вызовется ВСЕГДА)
+      # - name: Stop Application
+      #   if: always() # Этот флаг обязателен! Шаг сработает, даже если тесты упали с ошибкой
+      #   shell: pwsh
+      #   run: |
+      #     echo "Попытка остановить процесс с PID: ${{ env.APP_PID }}"
+          
+      #     # Проверяем, существует ли еще процесс с таким PID в системе
+      #     if (Get-Process -Id ${{ env.APP_PID }} -ErrorAction SilentlyContinue) {
+      #         # Принудительно завершаем процесс дерева
+      #         Stop-Process -Id ${{ env.APP_PID }} -Force
+      #         echo "Процесс успешно остановлен."
+      #     } else {
+      #         echo "Процесс не найден. Возможно, он уже закрылся сам или упал во время тестов."
+      #     }
+
+      #     # (Опционально) Выводим логи дебага в консоль GitHub Actions
+      #     echo "--- Стандартный вывод приложения (stdout) ---"
+      #     if (Test-Path "app_stdout.log") { Get-Content "app_stdout.log" -ErrorAction SilentlyContinue }
+
       - name: Upload all artifacts
         uses: actions/upload-artifact@v4
         with:

@@ -46,7 +46,7 @@ document.getElementById('btn-run').addEventListener('click', async () => {
 });
 
 window.onload = async function() {
-  const start_pth = await pyInvoke("execute_command", { command: "pwd" });
+  const start_pth = await pyInvoke("execute_command", { command: "cd" });
   term.changePwd(start_pth.stdout);
 }
 
